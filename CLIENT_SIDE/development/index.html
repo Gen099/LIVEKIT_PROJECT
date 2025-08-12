@@ -1,0 +1,603 @@
+<!-- C:\LIVEKIT_PROJECT\CLIENT_SIDE\development\index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIVEKIT Professional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            height: 32px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            -webkit-app-region: drag;
+        }
+
+        .title-bar-title {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .title-bar-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+
+        .title-bar-button {
+            width: 46px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .title-bar-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .title-bar-button.close:hover {
+            background: #e74c3c;
+        }
+
+        /* Main Container */
+        .container {
+            height: calc(100vh - 32px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* License Activation */
+        .license-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: 120px;
+        }
+
+        .logo h1 {
+            margin-top: 15px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .license-input-group {
+            margin: 30px 0;
+        }
+
+        .license-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .license-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .activate-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .activate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .activate-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: #2ecc71;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            width: 100%;
+            max-width: 1200px;
+            animation: fadeIn 0.5s;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .package-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .package-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .expiry-info {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .account-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .account-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .account-card.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .account-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .account-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e74c3c;
+        }
+
+        .status-indicator.active {
+            background: #2ecc71;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        .launch-button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .launch-button:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+        }
+
+        .launch-button.launching {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            cursor: wait;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hardware ID Display */
+        .hardware-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Title Bar -->
+    <div class="title-bar">
+        <div class="title-bar-title">LIVEKIT Professional</div>
+        <div class="title-bar-controls">
+            <button class="title-bar-button" onclick="minimizeWindow()">─</button>
+            <button class="title-bar-button" onclick="maximizeWindow()">□</button>
+            <button class="title-bar-button close" onclick="closeWindow()">✕</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- License Activation Section -->
+        <div id="licenseSection" class="license-section">
+            <div class="logo">
+                <img src="assets/logo.png" alt="LIVEKIT" onerror="this.style.display='none'">
+                <h1>LIVEKIT Professional</h1>
+            </div>
+            
+            <div class="license-input-group">
+                <input type="text" 
+                       id="licenseInput" 
+                       class="license-input" 
+                       placeholder="Enter your license key"
+                       maxlength="19"
+                       pattern="[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}">
+            </div>
+            
+            <button id="activateButton" class="activate-button" onclick="activateLicense()">
+                Activate License
+            </button>
+            
+            <div id="messageArea"></div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="dashboard" style="display: none;">
+            <div class="dashboard-header">
+                <div class="package-info">
+                    <div>
+                        <h2>Welcome to LIVEKIT</h2>
+                        <div style="margin-top: 10px;">
+                            <span class="package-badge" id="packageType">LOADING...</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="expiry-info">
+                            License expires: <span id="expiryDate">Loading...</span>
+                        </div>
+                        <button onclick="logout()" style="margin-top: 10px; padding: 8px 16px; background: #e74c3c; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accounts-grid" id="accountsGrid">
+                <!-- Account cards will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Hardware ID Display -->
+    <div class="hardware-info" id="hardwareInfo"></div>
+
+    <script>
+        let currentPackage = null;
+        let launchingAccount = null;
+
+        // Window controls
+        function minimizeWindow() {
+            window.electronAPI.minimizeWindow();
+        }
+
+        function maximizeWindow() {
+            window.electronAPI.maximizeWindow();
+        }
+
+        function closeWindow() {
+            window.electronAPI.closeWindow();
+        }
+
+        // Initialize app
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Display hardware ID
+            const hardwareId = await window.electronAPI.getHardwareId();
+            document.getElementById('hardwareInfo').textContent = `HW: ${hardwareId}`;
+
+            // Check for saved license
+            checkSavedLicense();
+
+            // Format license input
+            document.getElementById('licenseInput').addEventListener('input', formatLicenseInput);
+        });
+
+        // Format license key input
+        function formatLicenseInput(e) {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            let formatted = '';
+            
+            for (let i = 0; i < value.length && i < 16; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formatted += '-';
+                }
+                formatted += value[i];
+            }
+            
+            e.target.value = formatted;
+        }
+
+        // Check for saved license
+        async function checkSavedLicense() {
+            showMessage('Checking license...', 'info');
+            
+            const savedLicense = await window.electronAPI.loadSavedLicense();
+            
+            if (savedLicense && savedLicense.valid) {
+                showDashboard(savedLicense);
+            } else {
+                showMessage('', 'clear');
+            }
+        }
+
+        // Activate license
+        async function activateLicense() {
+            const licenseKey = document.getElementById('licenseInput').value;
+            
+            if (!licenseKey || licenseKey.length !== 19) {
+                showMessage('Please enter a valid license key', 'error');
+                return;
+            }
+
+            const button = document.getElementById('activateButton');
+            button.disabled = true;
+            button.textContent = 'Validating...';
+            
+            showMessage('Validating license...', 'info');
+
+            try {
+                const result = await window.electronAPI.validateLicense(licenseKey);
+                
+                if (result.valid) {
+                    showMessage('License activated successfully!', 'success');
+                    setTimeout(() => {
+                        showDashboard(result);
+                    }, 1500);
+                } else {
+                    showMessage(result.error || 'Invalid license key', 'error');
+                    button.disabled = false;
+                    button.textContent = 'Activate License';
+                }
+            } catch (error) {
+                showMessage('Connection error. Please try again.', 'error');
+                button.disabled = false;
+                button.textContent = 'Activate License';
+            }
+        }
+
+        // Show dashboard
+        function showDashboard(licenseData) {
+            currentPackage = licenseData;
+            
+            document.getElementById('licenseSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            
+            // Update package info
+            document.getElementById('packageType').textContent = licenseData.packageType;
+            document.getElementById('expiryDate').textContent = 
+                new Date(licenseData.expiryDate).toLocaleDateString();
+            
+            // Generate account cards
+            generateAccountCards(licenseData.maxAccounts);
+        }
+
+        // Generate account cards
+        function generateAccountCards(maxAccounts) {
+            const grid = document.getElementById('accountsGrid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const card = document.createElement('div');
+                card.className = `account-card ${i > maxAccounts ? 'disabled' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="account-number">Account ${i}</div>
+                    <div class="account-status">
+                        <div class="status-indicator" id="status-${i}"></div>
+                        <span>Ready to launch</span>
+                    </div>
+                    <button class="launch-button" 
+                            id="launch-${i}"
+                            onclick="launchAccount(${i})"
+                            ${i > maxAccounts ? 'disabled' : ''}>
+                        ${i > maxAccounts ? 'Locked' : 'Launch'}
+                    </button>
+                `;
+                
+                grid.appendChild(card);
+            }
+        }
+
+        // Launch account
+        async function launchAccount(accountNumber) {
+            if (launchingAccount === accountNumber) {
+                return;
+            }
+
+            launchingAccount = accountNumber;
+            
+            const button = document.getElementById(`launch-${accountNumber}`);
+            const status = document.getElementById(`status-${accountNumber}`);
+            
+            button.classList.add('launching');
+            button.textContent = 'Launching...';
+            button.disabled = true;
+
+            try {
+                const result = await window.electronAPI.launchAccount(accountNumber);
+                
+                if (result.success) {
+                    status.classList.add('active');
+                    button.textContent = 'Running';
+                    button.classList.remove('launching');
+                    
+                    // Reset after 5 seconds
+                    setTimeout(() => {
+                        status.classList.remove('active');
+                        button.textContent = 'Launch';
+                        button.disabled = false;
+                        launchingAccount = null;
+                    }, 5000);
+                } else {
+                    alert(`Failed to launch account: ${result.error}`);
+                    button.classList.remove('launching');
+                    button.textContent = 'Launch';
+                    button.disabled = false;
+                    launchingAccount = null;
+                }
+            } catch (error) {
+                alert('Launch failed. Please try again.');
+                button.classList.remove('launching');
+                button.textContent = 'Launch';
+                button.disabled = false;
+                launchingAccount = null;
+            }
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear saved license
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const messageArea = document.getElementById('messageArea');
+            
+            if (type === 'clear') {
+                messageArea.innerHTML = '';
+                return;
+            }
+            
+            if (type === 'info') {
+                messageArea.innerHTML = `<div class="spinner"></div>`;
+            } else if (type === 'error') {
+                messageArea.innerHTML = `<div class="error-message">${message}</div>`;
+            } else if (type === 'success') {
+                messageArea.innerHTML = `<div class="success-message">${message}</div>`;
+            }
+        }
+
+        // Prevent F12 and developer tools
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        // Disable right-click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

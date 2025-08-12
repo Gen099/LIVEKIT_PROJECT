@@ -1,0 +1,42 @@
+{
+  "proxies": [
+    {
+      "id": 1,
+      "name": "Proxy 1",
+      "type": "socks5",
+      "host": "proxy1.example.com",
+      "port": 1080,
+      "username": "user1",
+      "password": "pass1",
+      "country": "US",
+      "city": "New York"
+    },
+    {
+      "id": 2,
+      "name": "Proxy 2",
+      "type": "socks5",
+      "host": "proxy2.example.com",
+      "port": 1080,
+      "username": "user2",
+      "password": "pass2",
+      "country": "UK",
+      "city": "London"
+    },
+    {
+      "id": 3,
+      "name": "Proxy 3",
+      "type": "http",
+      "host": "proxy3.example.com",
+      "port": 8080,
+      "username": "user3",
+      "password": "pass3",
+      "country": "CA",
+      "city": "Toronto"
+    }
+  ],
+  "rotation": {
+    "enabled": true,
+    "interval": 3600,
+    "strategy": "round-robin"
+  }
+}

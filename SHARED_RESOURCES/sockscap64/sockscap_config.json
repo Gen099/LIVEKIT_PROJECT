@@ -1,0 +1,13 @@
+{
+  "proxy_type": "SOCKS5",
+  "proxy_host": "192.168.1.100",
+  "proxy_port": 1080,
+  "username": "user1",
+  "password": "pass1",
+  "applications": [
+    {
+      "path": "obs64.exe",
+      "force_proxy": true
+    }
+  ]
+}

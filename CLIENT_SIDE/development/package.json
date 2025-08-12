@@ -1,0 +1,66 @@
+{
+  "name": "livekit-professional",
+  "version": "1.0.0",
+  "description": "LIVEKIT Professional Streaming Software",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never",
+    "obfuscate": "node scripts/obfuscate-all.js",
+    "pack-basic": "node scripts/pack-basic.js",
+    "pack-pro": "node scripts/pack-pro.js",
+    "pack-business": "node scripts/pack-business.js"
+  },
+  "build": {
+    "appId": "com.livekit.professional",
+    "productName": "LIVEKIT Professional",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/*.ts",
+      "!*.code-workspace",
+      "!.gitignore",
+      "!README.md",
+      "!dist",
+      "!packages"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/sqlite3/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LIVEKIT Professional",
+      "uninstallDisplayName": "LIVEKIT Professional",
+      "license": "license.txt",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.7",
+    "node-machine-id": "^1.1.12",
+    "axios": "^1.6.2",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "electron": "^27.1.3",
+    "electron-builder": "^24.9.1",
+    "javascript-obfuscator": "^4.1.0",
+    "@electron/notarize": "^2.2.0"
+  }
+}
